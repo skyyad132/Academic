@@ -1,0 +1,150 @@
+#include <iostream>
+#include <string.h>
+#include <ctype.h>
+using namespace std;
+#define MAX 10
+
+class Stack {
+  float a[MAX];
+  int top;
+  int i;
+  
+   public:
+    Stack() {   // Default constructor
+      top = -1; // Intializing the value of top to -1, becuase at the instantiation of the stack object, it would be empty
+    }
+  
+ 
+    int isEmpty() {
+      if (top == -1)
+        return 1;
+      else 
+        return 0;
+    }
+    
+    int isFull() {
+      if (top == MAX - 1) 
+        return 1;
+      else 
+        return 0;
+    }
+    
+    void push(int n) {
+      a[++top] = n;    // Using pre increment operator.
+    }
+    
+    float pop() {
+      return a[top--]; // Using post decrement operator. It will first return a[top] the value of top will be decremented
+    }
+    
+    void display() {
+      for (i = 0; i <= top; i++) {  // Taking i <= top since stack array element ranges from 0 to top including top
+        cout<<a[i]<<" | ";
+      }
+    }
+};
+
+
+float operation(float op1, float op2, char op) {
+	switch(op) {
+		case '+': return op1 + op2; break;
+		case '-': return op1 - op2; break;
+		case '*': return op1 * op2; break;
+		case '/': return op1 / op2; break;
+	}
+}
+
+
+float prefixEval(char *s) {
+	int i;
+	char token;
+	
+	Stack S;
+	
+	for (i = strlen(s) - 1; i >= 0; i--) {
+		token = s[i]; 
+		
+		if (isdigit(token)) {
+			S.push(token - '0');
+		}
+		
+		else if(isalpha(token)) {
+			cout<<"Enter the value of "<<token<<" : ";
+			cin>>token;
+			S.push(token - '0');
+		}
+		
+		else {
+			float op1 = S.pop();
+			float op2 = S.pop();
+			
+			float res = operation(op1, op2, s[i]);
+			S.push(res); 
+		}
+	}
+	return S.pop();
+}
+
+
+float postfixEval(char *s) {
+	int i;
+	char token;
+	int l;
+	Stack S;
+	
+	for (i = 0, l = strlen(s); i < l; i++) {
+		token = s[i]; 
+		
+		if (isdigit(token)) {
+			S.push(token - '0');
+		}
+		
+		else if(isalpha(token)) {
+			cout<<"Enter the value of "<<token<<" : ";
+			cin>>token;
+			S.push(token - '0');
+		}		
+		
+		else {
+			float op2 = S.pop();
+			float op1 = S.pop();
+			
+			float res = operation(op1, op2, s[i]);
+			S.push(res); 
+		}
+	}
+	return S.pop();
+}
+
+
+int main() {
+	char s[100];
+	float result;
+	//cin>>s;
+	
+	//float result = prefixEval(s);
+	
+	//cout<<result<<"\n";
+	
+	int choice;
+	do {
+		cout<<"\n1.Evaluate Prefix\n2.Evaluate Postfix\n3.Exit\nEnter your choice : ";
+		cin>>choice;
+		
+		switch (choice) {
+			case 1:
+				cout<<"\nEnter prefix expression : ";
+				cin>>s;
+				result = prefixEval(s);
+				cout<<"Expression "<<s<<" is evaluated to : "<<result<<"\n";
+				break;
+				
+			case 2:
+				cout<<"\nEnter postfix expression : ";
+				cin>>s;
+				result = postfixEval(s);
+					cout<<"Expression "<<s<<" is evaluated to : "<<result<<"\n";
+				break;
+		}
+	} while (choice != 3);
+}

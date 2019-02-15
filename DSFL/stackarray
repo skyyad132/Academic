@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+#define MAX 10
+
+class Stack {
+  int a[MAX];
+  int top;
+  int i;
+  
+   public:
+    Stack() {   // Default constructor
+      top = -1; // Intializing the value of top to -1, becuase at the instantiation of the stack object, it would be empty
+    }
+  
+ 
+    int isEmpty() {
+      if (top == -1)
+        return 1;
+      else 
+        return 0;
+    }
+    
+    int isFull() {
+      if (top == MAX - 1) 
+        return 1;
+      else 
+        return 0;
+    }
+    
+    void push(int n) {
+      a[++top] = n;    // Using pre increment operator.
+    }
+    
+    int pop() {
+      return a[top--]; // Using post decrement operator. It will first return a[top] the value of top will be decremented
+    }
+    
+    void display() {
+      for (i = 0; i <= top; i++) {  // Taking i <= top since stack array element ranges from 0 to top including top
+        cout<<a[i]<<" | ";
+      }
+    }
+};
+
+
+int main() {
+  Stack S;  // Instantiating object S of class Stack
+  int i, choice, p;
+  
+  do {
+    cout<<"\n1.Push\n2.Pop\n3.Display\n4.Exit\nEnter your choice : ";
+    cin>>choice;
+    
+    
+    switch(choice) {
+      case 1: // Push
+        if (S.isFull()) // isFull() return 1 if the stack is full
+          cout<<"Stack is full\n";
+        else 
+          cout<<"\nEnter the element to be pushed to the stack : ";
+          cin>>i;
+          S.push(i);  
+        break;
+        
+        
+      case 2: // Pop
+        if (S.isEmpty()) // isEmpty() returns 1 if the stack is empty
+          cout<<"\nCannot POP. Stack is empty\n";
+        else
+          p = S.pop();
+          cout<<"\nElement popped is "<<p<<"\n";
+        break;
+        
+        
+      case 3: // Displaying the current contents of the stack without changing the stack values
+        cout<<"\n";
+        S.display();
+        cout<<"\n";
+        break;
+        
+        
+      case 4:
+        cout<<"\nProgram End\n";
+      
+      
+      default:
+        cout<<"Invalid choice. Try again\n";
+        break;
+      }
+    } while(choice != 4);
+}
