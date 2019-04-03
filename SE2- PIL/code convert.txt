@@ -1,0 +1,136 @@
+.model small					;small memory allocation
+
+.data
+
+        menu db 10d,13d,"    MENU"		;defining menu strings
+             db 10d,"1.HEX to BCD"		;10d for next line 13d for carriage return	
+             db 10d,"2.BCD to HEX"
+             db 10d,"3.EXIT"
+             db 10d,"Enter your Choice: $"	;$ indicates end of string
+
+         m1  db 10d,"Enter 4 digit hex number:$"
+         m2  db 10d,"BCD Equivalent is:$"
+         m3  db 10d,"Enter 5 Digit BCD Number:$"
+         m4  db 10d,"EQUIVALENT Hex is:$"
+
+        count db 00H
+        num dw 0000H
+.code						;start of code segment
+
+mov AX,@DATA					;move base address of data segment into ax
+mov DS,AX					;move data of ax to data segment register	
+
+MENU1:lea dx,menu
+     mov ah,09H					;load string into dx register using 09H function of INT 21H
+     int 21H
+
+     mov ah,01H
+     int 21H
+
+     CMP al,'1'					;compare contents of al with 1
+     JE case1
+     CMP al,'2'
+     JE case2
+     CMP al,'3'
+     JE case3
+
+case1:CALL Hex2BCD
+      JMP MENU1
+case2:CALL BCD2Hex
+      JMP MENU1
+case3:mov ah,4CH
+      int 21H
+
+Hex2BCD PROC NEAR				;start of procedure
+lea dx,m1
+mov ah,09H
+int 21H
+
+mov count,04H
+loop1: mov ah,01H
+       int 21H
+       cmp al,39H
+       jbe loop2
+       sub al,07H
+loop2: sub al,30H
+       rol num,04H
+       mov ah,00H
+       add num,ax
+       dec count
+       jnz loop1
+       
+       lea dx,m2
+       mov ah,09H
+       int 21H
+
+       mov AX,num
+       mov dx,0000H
+       mov bx,10000
+       mov count,05H
+	
+loop5:div bx
+      add al,30H
+      mov cx,dx
+      mov dl,al
+      mov ah,02H
+      int 21H
+      mov ax,bx
+      mov bx,10
+      mov dx,0000H
+      div bx
+      mov bx,ax
+      mov ax,cx
+      dec count
+      jnz loop5
+RET						;return from procedure to calling function
+ENDP						;end procedure
+BCD2Hex PROC NEAR				;start of bcd to hex procedure
+
+lea dx,m3
+mov ah,09H
+int 21H
+
+mov cx,0000H
+mov BX,10000
+mov count,05H
+loop3:  mov ah,01H
+        int 21H
+        mov ah,00H
+        sub al,30H
+        mul BX
+        add cx,ax
+        mov ax,bx
+        mov dx,0000H
+        mov bx,0AH
+        div bx
+        mov bx,ax
+        dec count
+        jnz loop3
+        
+        mov count,04H
+        
+        lea dx,m4
+        mov ah,09H
+        int 21H
+
+loop4:  rol cx,04H
+        mov num,cx
+        and cx,000FH
+        cmp cl,09H
+        jbe loop6
+        add cl,07H
+        
+loop6:  add cl,30H
+        mov dl,cl
+        mov ah,02H
+        int 21H
+        mov cx,num
+        dec count
+        jnz loop4
+
+RET						;return from procedure to calling function
+ENDP						;end procedure
+End
+
+
+

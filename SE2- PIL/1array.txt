@@ -1,0 +1,31 @@
+.model small    ;memory allocation
+.data           ;start of data segment
+
+arr db 10H,20H,30H,40H,50H
+cy db 00H
+sum db 00H
+cnt db 05H
+
+.code           ;start of code segment
+
+mov ax,@data
+mov ds,ax
+
+lea si,arr      ;load effective address in SI register
+
+up:mov al,[si]
+   add sum,al
+   jnc down
+
+   inc cy
+
+down:inc si
+     dec cnt
+     jnz up
+
+mov ah,4ch     ;mov 4ch function of interupt 21H in ah register
+int 21H
+
+end
+
+

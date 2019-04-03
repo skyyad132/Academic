@@ -1,0 +1,150 @@
+.model small
+
+print macro xx                  ;print macro to display strings on screen
+lea dx,xx                       
+mov ah,09H                      ;09H function of int 21H to display the string
+int 21H
+endm
+
+.data                                  ;start of data segment
+
+    fname1 db 20 dup(0)         ;variable to store first file name
+    fname2 db 20 dup(0)         ;variable to store second file name
+    
+    read3 db 10d,13d,"File Names Read Successfully$"    ;display if correct command line is written
+    
+    error1 db 10d,"File Opening Error$"                               ;display if opening file error
+    error2 db 10d,"Error in Reading from file 1$"               ;display error if cant read from file
+    error3 db 10d,"Error in creating file:$"
+    write1 db 10d,"Error in writing file$"
+    close1 db 10d,"Error in closing file$"     	            ;display error if file not closed properly
+    read4 db 10d,"Error in reading file$"
+    fileclose db 10d, "File closed$"
+    read8 db 10d,"Please enter second file name with space$"
+    
+    handle1 dw ?          				           ;variable to store file handle for first file
+    handle2 dw ?                                                                     ;variable to store file handle for second file
+    buffer db 100,0,100 dup('0')                                          ;variable to store data read from file
+    
+    
+.code               ;start of code segment
+mov ax,@data        ;move base address of data segment into ax register
+mov ds,ax                ;move contents of ax into data segment register
+    
+mov ah,62H            ;load psp address into the bx register
+int 21H
+
+mov es,bx                ;mov psp address from bx int extra segment register
+    
+
+mov si,81H              ;make source index register point to 81H
+mov al,es:[si]          ;move the content pointed by si into al register
+cmp al," "                ;compare if there is a space after the copy1 command(program file name)
+je read6                  ;if space move onto next step(read6)
+print error1           ;if no space print error(File Opening Error)
+jmp exit                 ;exit from program
+
+read6:inc si          ;inc si to point it to beginning of file name
+      lea di,fname1         ;make di point to variable fname1 where the file name from cmd will be stored
+read1:mov al,es:[si]   ;move the first character read from cmd int al register
+      cmp al," "                ;keep comparing untill the whole word is read ie till the next space is
+                                        encountered
+      je next                     ;if space encountered move to next step(next)
+     cmp al,0DH              ;if enter key is encountered before a space
+      je read1_error       ;print not second file name found
+      mov [di],al             ;if not space then move the character into fname1 pointed by destination index register
+      inc si                       ;make si point to next character
+      inc di                      ;make si point to next free space to store another character
+      jmp read1             ;keep looping read1 untill space is encountered
+
+read1_error:print read8             ;print error no second file name
+                       jmp exit
+      
+next:inc si                   ;make si point to the next file name in cmd
+     lea di,fname2       ;now make di point to the next file name variable where the second file name 
+                                     will be stored
+     
+     
+read2:mov al,es:[si]   ;move charater pointed by si into al
+      cmp al,0DH            ;keep comparing till enter key is encountered
+      je next1                  ;if enter key then move to next step(next1)
+      mov [di],al             ;else move charater in al into space pointed by di
+      inc di                      ;inc di to point to the next free space
+      inc si                       ;inc si to point to the next character in cmd
+      jmp read2             ;keep looping till enter key is encountered
+      
+next1:print read3            ;display both file names read successfully
+
+open:mov ax,3D00H      ;function 3dh of int 21h opens the file.and 00H in al tells to open the file in read only mode
+     lea dx,fname1            ;ds:dx points to the file name to read from
+     int 21H
+     jnc success1               ;carry is set when an error has occured in opening the file
+     print error2                ;if carry is there display error message
+     jmp exit                      ;jump to exit on carry
+     
+success1:mov handle1,ax ;if successfully opened the file handle is stored in ax register.move it to 
+     handle1
+
+     mov cx,0000H       ;here cx denotes the file attribute ::0H representing read only attribute
+     mov ah,3CH           ;3CH function of int 21H is used for creating the file cx points to attribute
+     lea dx,fname2       ;ds:dx points to the file name to create
+     int 21H
+     jnc success2           ;carry is set if error occured on creating the file
+     print error3           ;print error on carry generation
+     jmp exit                 ;jump to exit
+     
+success2:mov ax,3D01H   ;3Dh of int 21H to open a file and 01H in al to make it write only
+         lea dx,fname2 	   ;ds:dx points to the file name to open in write only mode
+         int 21H
+         jnc success3  	  ;carry generated if file cannot be opened
+         print error1 	  ;print the error message
+         jmp exit   	                ;jump to exit
+        
+success3:mov handle2,ax ;move the file handle of second file from ax to handle2
+
+;Start of reading from file 1 and copying the data to file 2
+
+fread:mov bx,handle1  ;move file handle of first file into bx
+      mov ah,3FH               ;function 3FH of int 21H reads a string from file
+      mov cx,100               ;cx represents the number of bytes to read from file
+      lea dx,buffer            ;ds:dx points to the buffer location to store the read data
+      int 21H
+      jc read_error           ;carry is generated if error occured
+      ; mov handle1,bx
+      cmp ax,0000          ;ax is equal to the number of bytes read.If ax is equal to 0 bytes no data is left 
+                                       to be read
+      je close                     ;jump to close if all data has been read
+      
+      mov cx,ax               ;move the number of bytes read from ax into cx
+      mov bx,handle2    ;move the file handle of file 2 into bx register
+      mov ah,40H           ;function 40H of int 21H is used to write data to the file
+      lea dx,buffer         ;ds:dx points to the buffer location where the data has been read into
+      int 21H
+      jc write_error        ;carry is generated if an error occured during writing process
+      ;  mov handle2,bx
+      jmp fread               ;keep looping till all the data has been read and written into the new file
+      
+      
+read_error:print read4  ;print if a read error has occured
+            jmp exit                 ;jump to exit
+ 
+;Closing of files after read and write operations            
+close:mov ah,3EH         ;Function 3EH of int 21H is used to close an open file
+      mov bx,handle1      ;move the file handle of file 1 into bx register
+      int 21H
+      jc close_error           ;carry is generated if error occures during closing of the file
+      mov bx,handle2       ;move the file handle of file 2 into bx register
+      mov ah,3EH             ;Function 3EH of int 21H is used to close an open file
+      int 21H
+      jc close_error          ;carry is generated if error occures during closing of the file
+     print fileclose           ;print file closed successfully
+      jmp exit                    ;jump to exit
+
+write_error:print write1       ;displays error occured during the writing process
+            jmp exit      
+close_error:print close1       ;displays error occured during the closing process
+
+exit:mov ah,4Ch                      ;exit from the program
+     int 21H
+end                                            ;End of the maing program
+

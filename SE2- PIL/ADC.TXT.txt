@@ -1,0 +1,31 @@
+org 00h			;starting of code
+ljmp start		;long jump
+
+delay:mov r0,#0xff	;lower bytes moved to r0
+      mov r1,#0xff	;higher bytes moved to r1
+
+here:djnz r1,here	;decrement r1 till r1 becomes 0
+     mov r1,#0x0f	;higher bytes moved to r1
+     djnz r0,here	;decrement r0 till r0 becomes 0
+     ret		;return
+
+start:clr p2.0 		;clear port 2.0
+      clr p2.2		;clear port 2.2
+      call delay	;call delay function 
+      setb p2.2		;set port 2.2 bit to 1
+      call delay	;call delay function
+
+waitforintr:jnb p2.3,readData 		;jumb to readData if port 2.3 is not 0
+            sjmp waitforintr		;small jump
+
+readData:setb p2.1		;set port 2.1 bit to 1
+         call delay		;call delay function
+         clr p2.1		;clear port 2.1(setting that bit to 0)
+         call delay		;call delay function
+         mov a,p1    		;move data of port 1 to accumulator
+         cpl a			;compliment the contents of accumulator
+         mov p2,a		;mov contents of accumulator to port 2
+
+loop1:sjmp loop1		;small jump
+
+end				;end of the program

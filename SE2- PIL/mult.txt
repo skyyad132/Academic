@@ -1,0 +1,69 @@
+org 00h
+ljmp start
+
+org 100h
+multiplicand_lb : db 0bbh
+multiplicand_hb : db 0aah
+multiplier : db 0ffh
+
+start : lcall mult
+	    lcall dist
+	    here : sjmp here
+
+mult : mov dptr,#multiplicand_lb
+	   clr a
+	   movc a,@a+dptr
+	   mov b,a
+	   
+	   mov dptr,#multiplier
+	   clr a
+	   movc a,@a+dptr
+	   mul ab
+	   mov r0,a
+	   mov r7,b
+	   
+	   
+       mov dptr,#multiplicand_hb
+	   clr a
+	   movc a,@a+dptr
+	   mov b,a
+	   
+	   mov dptr,#multiplier
+	   clr a
+	   movc a,@a+dptr
+	   mul ab
+	   add a,r7
+	   jnc down
+	   inc b
+	   
+down : mov r1,a
+	   mov r2,b
+
+dist : mov a,r2
+	   cpl a
+	   mov p2,a
+	   lcall delay
+	   
+	   mov a,r1
+	   cpl a
+	   mov p2,a
+	   lcall delay
+	   
+	   mov a,r0
+	   cpl a
+	   mov p2,a
+	   lcall delay
+	   
+	   ret
+	   
+delay : mov r3,#10h
+		mov r4,#0h
+		mov r5,#0h
+		
+loop :  djnz r5,loop		
+	    djnz r4,loop
+		djnz r3,loop
+		
+		ret
+		
+		end

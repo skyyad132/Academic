@@ -1,0 +1,26 @@
+org 00h		;start of program
+ljmp start	;long jump to start
+
+org 0bh		;for timer 0(address start from 0bh)
+
+clr tfo		;clear time flag 0 bit to 0
+clr tr0		;clear time run 0 bit to 0
+
+cpl p1.0	;compliment contents of port 1.0
+
+mov tl0,#1ah		;move 1ah to lower byte of timer 0
+mov th0,#0ffh		;move 0ffh to higher byte of timer 0
+
+setb tr0		;set run time bit to 1
+reti			;return from ISR of timer 0
+
+start:setb ea		;set ea bit to 1
+      setb et0		;set et 0 bit to 1
+      mov tmod,#01h	;move 01h to tmod register
+      mov tl0,#0ah	;move 0ah to lower byte of timer 0 
+      mov th0,#0ffh	;move 0ffh to higher byte of timer 0
+      setb tr0		;set run time bit of timer 0 to 1
+
+here: sjmp here		;short jump
+
+end			;end of program

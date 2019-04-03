@@ -1,0 +1,101 @@
+.model small
+
+public str1,str2,str3,m5,m6,m7,m8  ;procedure or variable may be used in another program at link time
+
+EXTRN Compare:FAR       ;the procedure is defined in another program
+EXTRN Concatenate:FAR   ;the procedure is defined in another program
+EXTRN Substring:FAR     ;the procedure is defined in another program
+
+accept macro xx         ;macro to accept a string from user
+lea dx,xx
+mov ah,0AH
+int 21H
+endm
+
+print macro yy       ;macro to display a string on the screen
+lea dx,yy
+mov ah,09H
+int 21H
+endm
+
+.data               ;start of data segment
+
+    m1 db 10d,13d,"     MENU"                 ;m1 variable to store the menu entry
+       db     10d,"1.Input two strings"
+       db     10d,"2.Compare strings"
+       db     10d,"3.Concatenate strings"
+       db     10d,"4.Substring in string"
+       db     10d,"5.Exit"
+       db     10d,"Enter your Choice:$"
+       
+    m2 db 10d,"Invalid Choice$"
+    m3 db 10d,"Enter string 1:$"
+    m4 db 10d,"Enter string 2:$"
+    m5 db 10d,"Strings are equal$"
+    m6 db 10d,"Strings are not equal$"
+    m7 db 10d,"Found a substring$"
+    m8 db 10d,"No Substrings Found$"
+    
+    str1 db 20,?,20 dup('$')          ;to store string 1
+    str2 db 20,?,20 dup('$')          ;to store string 2
+    str3 db 40,?,40 dup('$')          ;to store string 3
+    
+       
+.code           ;start of code segment
+
+    mov ax,@data            ;move base address of data segment into ax register
+    mov ds,ax               ;move contents of ax into data segment
+    mov es,ax               ;move contents of ax into extra segment
+
+MAIN:print m1               ;print m1 variable
+
+
+     mov ah,01H              ;accept a single character input from keyboard
+     int 21H
+     
+     cmp al,'1'              ;compare the character stored in al with 1,2,3,4
+     je case1                ;jump to the equivalent case according to the input
+     cmp al,'2'
+     je case2
+     cmp al,'3'
+     je case3
+     cmp al,'4'
+     je case4
+     cmp al,'5'
+     je case5
+     
+     jmp case6              ;jump to invalid input case
+     
+     
+case1:call Accept1           ;call the procedure to accept strings
+      jmp main               ;jump to main after accepting the strings
+
+case2:call Compare            ;call compare procedure to compare strings
+      jmp main
+      
+case3:call Concatenate        ;call Concatenate procedure to concatenate 2 strings
+      jmp main
+      
+       
+case4:call Substring          ;find a substring in a string
+      jmp main
+
+case5:mov ah,4ch               ;exit from the program
+      int 21H
+      jmp main
+      
+case6:print m2                 ;print invalid choice and jump back to main
+      jmp main
+
+
+Accept1 proc NEAR           ;begin procedure to accept strings
+print m3
+
+accept str1                 ;calls accept macro for string 1
+
+print m4
+
+accept str2                 ;calls accept macro for string 2
+ret                         ;return on completion of the procedure
+Accept1 endp                ;end procedure
+end                         ;end program

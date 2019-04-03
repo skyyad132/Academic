@@ -1,0 +1,160 @@
+.model small        ; small memory allocation
+
+.data       ;data segment begins here
+
+    m1 db 10d,13d,"Menu"            ;create a menu entry variable
+       db     10d,"1.Find Length"       ;10d -> newline 13d -> carriage return
+       db     10d,"2.Display in Reverse"
+       db     10d,"3.Check Palindrome"
+       db     10d,"4.Exit"
+       db     10d,"Enter your Choice:$"
+       
+    m2 db 10d,"Enter your String:$"     ;$end of string
+    m3 db 10d,"Invalid Choice$"
+    m4 db 10d,"Your String is:$"
+    m5 db 10d,"Strings are not palindrome$"
+    m6 db 10d,"Strings are palindrome$"
+    
+    str1 db 20,?,20 dup(?)          ;create str1 of max size 20 and allocate 1 byte for each block
+    count db,00H
+    num db,00H
+    
+print macro xx          ;general macro with 1 parameter
+lea dx,xx
+mov ah,09h
+int 21h       
+    
+.code
+ mov ax,@data       ;move base address of data segment to ax
+     mov ds,ax          ;move it from ax to data segment register
+ 
+MENU: print m1         ;call macro for print
+      
+      
+      mov ah,01H        ;01H to accept single character input from keyboard of 21H interrupt
+      int 21H
+ 
+ 
+      cmp al,'1'         ;compare value of al with ascii value of 1
+      je case1               ;jump if equal to case1 label
+     cmp al,'2'
+     je case2
+     cmp al,'3'
+     je case3
+     cmp al,'4'
+     je case4
+     
+     jmp case5
+     
+     
+case1:call Length2          ;call procedure for length
+        jmp MENU
+        
+case2:call Reverse          ;call procedure for reverse
+        jmp MENU
+
+case3:call Palindrome           ;call procedure for palindrome
+        jmp MENU 
+         
+case4:mov ah,4CH            ;4CH safe exit from dos of iterrupt 21H
+        int 21H
+        
+case5:print m3
+        
+        jmp MENU
+        
+
+Length2 proc NEAR       ;begin length2 procedure of type NEAR
+print m2
+
+lea dx,str1
+mov ah,0AH              ;0AH function of interrupt 21H to accept string from user
+int 21H
+
+print m4
+
+lea si,str1+1           ;load actual length of string in source index register
+mov al,[si]
+mov num,al
+and al,0F0H
+rol al,04H
+cmp al,09H
+jbe num1
+add al,07H
+num1:add al,30H         ;add contents of al with 30H
+     mov dl,al
+     mov ah,02H
+     int 21H
+     mov al,num         ;mov value of num to al register
+     and al,0FH
+     cmp al,09H
+     jbe num2
+     add al,07H
+num2:add al,30H
+     mov dl,al
+     mov ah,02H
+     int 21H
+     
+     
+     
+ret                     ;ret is used to return to the calling function
+endp
+
+Reverse proc NEAR       ;beginning of reverse procedure
+print m2
+
+lea dx,str1
+mov ah,0AH
+int 21H
+
+print m4
+
+lea si,str1+1
+mov cl,[si]
+mov ch,00H
+add si,cx
+
+loop1:mov dl,[si]
+        mov ah,02H
+        int 21H
+        
+        dec si
+        dec cl
+        jnz loop1
+
+ret             ;return from procedure
+endp            ;end procedure here
+
+Palindrome proc NEAR        ;begin of palindrome procedure
+print m2
+
+lea dx,str1
+mov ah,0AH
+int 21H
+
+lea si,str1+1
+mov cl,[si]
+mov ch,00H
+add si,cx
+lea di,str1+2
+
+loop3:mov al,[si]
+      cmp al,[di]
+      je loop4
+      
+      print m5
+      
+      ret
+      
+loop4:inc di
+      dec si
+      cmp di,si
+      jge loop5
+      jmp loop3
+      
+loop5:print m6
+      
+ret
+endp                ;end procedure here
+
+end
