@@ -32,7 +32,7 @@ void q::nq(char name[20], int current_priority)
 	else
 	{
 		temp = front;
-		while (temp != NULL && temp -> q_node_priority >= current_priority)
+		while (temp != NULL && current_priority <= temp -> q_node_priority)
 		{
 			prev = temp;
 			temp = temp -> next;
@@ -117,15 +117,15 @@ int main()
 	do
 	{
 		cout << "\n\nEnter the choice : \n";
-		cout<<"1.Enqueue\n2.Dequeue\n9.Exit\n";
+		cout<<"1. Enqueue\n2. Dequeue\n9. Exit\n";
 		cin >> ch;
 		switch(ch)
 		{
 			case 1:
-				cout<<"Enter the name :";
-				cin>>n;
-				cout<<"\nEnter the Priority (1. General ; 2. Non-serious ; 3. Serious)";
-				cin>>p;
+				cout << "Enter the name : ";
+				cin >> n;
+				cout << "\nEnter the Priority (1. General ; 2. Non-serious ; 3. Serious) : ";
+				cin >> p;
 				Q.nq(n,p);
 				Q.display();
 				break;
