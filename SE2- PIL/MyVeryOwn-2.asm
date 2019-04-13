@@ -5,7 +5,7 @@ disp macro msg ; macro to display message
 endm
 .model small
 .stack 100h
-  .data
+  .data 
     msg1 db 10,13, "Enter 5 digit bcd number$"
     msg2 db 10,13, "Equivalent hexadecimal number$"
     msg3 db 10,13, "Enter your choice$"
@@ -86,8 +86,8 @@ bh1 endp
 bh2 proc near ; hex to bcd
 
   disp msg5; enter hex number
-  mov cx, 0404h ; cx = 0404
-  mov dx, 0000h; dx = 0000h  
+  mov cx, 0404h ; ch contains the counter and cl contains the amount by which rotation will take place
+  mov dx, 0000h; at the end, dx will contain the value input by user
 
   back6:
     mov ah, 01h 
