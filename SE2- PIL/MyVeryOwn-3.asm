@@ -21,7 +21,7 @@ endm
   msg8 db 10,13, "Wrong Choice $"
   msg9 db 10,13, "Enter the string : $"
   msg10 db 10,13, "Reverse string is : $"
-  msg11 db 10,13, "lenght is : $"
+  msg11 db 10,13, "length is : $"
   msg12 db 10,13, "String is palindrome$"
   msg13 db 10,13, "String is NOT a palindrome$"
 
