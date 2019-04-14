@@ -233,7 +233,7 @@ int Seq_File::Search(int Roll)
   if (file)
   {
     file.read((char*)(&S), sizeof(S));
-    while (!file.eof())
+    while (!file.eof()) 
     {
       if (S.return_roll() == Roll)
       {
