@@ -1,18 +1,23 @@
-PORTPIN EQU P1.0
-ORG OOH
-LJMP START
-ORG 1BH;                 ;  ISR ADDR OF TIMER 1
-CLR TF1
-CLR TR1
-CPL PORTPIN
-      SETB TR1      ;run timer
-      RETI     ;ret from ISR of timer1
+; Generation of square wave of 50% duty cycle, 2KHz on P1.0  
+; (Timer 1 is used in mode 2- 8 BIT AUTO RELOAD MODE )
 
-START: 
-    SETB EA         ;enable all interrupts
-    SETB ET1        ;enable timer0 int
-    MOV TMOD,#20H   ;Timer 1, mode 1(16-bit)
-    MOV TH1,#1AH    ;Timer value = 1AH,load cnt in timer reg
-    SETB TR1        ;Run timer, when TF1 = 1, control gets transferred to ISR of Timer1
-    HERE: SJMP HERE
-END      
+PORTPIN EQU P1.0 
+org 00h 
+  ljmp start 
+
+org 1bh ; isr address of timer 1
+  clr tf1 
+  clr tr1 
+  cpl portpin 
+  setb tr1 
+  reti ; return from isr of timer1
+
+start:
+  setb ea ; enable of interrupts
+  setb et1 ; enable timer0 interrupts
+  mov tmod, #20H ; timer 1, mode 1
+  mov th1, #1ah ; timer value = 1ah, load count in timer register
+  setb tr1 ; run tiimer, when tf1 = 1, control gets transferred to isr of timer 1
+
+here: sjmp here
+end
