@@ -205,7 +205,7 @@ dis:
   back1:
     rol bx, cl ; cl = 4
     ; bx = 1111 1111 1111 1010 
-    ; bx rotated by r
+    ; bx rotated by 4
     ; after rotate bx = 1111 1111 1010 1111 
     mov dl, bl
     ; dl = af

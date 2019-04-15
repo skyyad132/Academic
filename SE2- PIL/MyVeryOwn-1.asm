@@ -29,10 +29,12 @@
     JA add1
     ADD result, 30h
     jmp add2
-    add1 add result, 37h
-    add2 mov ah, 02h
-          mov dl, result
-          int 21h
+    add1:
+      add result, 37h
+    add2:
+       mov ah, 02h
+       mov dl, result
+       int 21h
 
     ; masking the msb
     AND BL, 0fh
