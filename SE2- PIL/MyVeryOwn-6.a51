@@ -18,7 +18,7 @@ delay:
         
 start:  
 		call addn	; call to addition
-	    call display
+	  call display
 		here: sjmp here ; Telling uC to wait 
 		
 addn:   

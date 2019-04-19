@@ -14,10 +14,10 @@ org 1bh ; isr address of timer 1
 
 start:
   setb ea ; enable of interrupts
-  setb et1 ; enable timer0 interrupts
+  setb et1 ; enable timer1 interrupts
   mov tmod, #20H ; timer 1, mode 1
   mov th1, #1ah ; timer value = 1ah, load count in timer register
-  setb tr1 ; run tiimer, when tf1 = 1, control gets transferred to isr of timer 1
+  setb tr1 ; run timer, when tf1 = 1, control gets transferred to isr of timer 1
 
 here: sjmp here
 end

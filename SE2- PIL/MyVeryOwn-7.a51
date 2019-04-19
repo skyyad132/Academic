@@ -57,7 +57,7 @@ mult :
      down : 
         mov r1,a ; middle byte
 	      mov r2,b ; carry
-
+		 ret
 dist : 
      mov a,r2 ; carry : 01
 	   cpl a
