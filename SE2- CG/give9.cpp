@@ -1,5 +1,5 @@
 #include <GL/glut.h>
-#include <iostream>
+
 #include <math.h>
 
 GLfloat oldx = -0.7, oldy = 0.5;
@@ -57,28 +57,48 @@ void display()
 
     glBegin(GL_LINES);
 
-/*
+    /*
 	 drawkoch(0.0,0.5,1);
 	 
-      drawkoch(-120.0, 0.5, 1); 
+      drawkoch(-120.0, 0.5, 1);
+	 
   drawkoch(120.0,0.5,1);
+	
+ */ /*
+	
  drawkoch(0.0,0.15,2);
- drawkoch(-120.0, 0.15, 2)	 
-drawkoch(120.0,0.15,2)
- drawkoch(0.0,0.05,3);
 	
- drawkoch(-120.0, 0.05, 3);	
- drawkoch(120.0,0.05,3);	
- glEnd()p
- glFlush()
+ drawkoch(-120.0, 0.15, 2);
+	 
+drawkoch(120.0,0.15,2);
+	 */
+
+    drawkoch(0.0, 0.05, 3);
+
+    drawkoch(-120.0, 0.05, 3);
+
+    drawkoch(120.0, 0.05, 3);
+
+    glEnd();
+
+    glFlush();
 }
-int main(int argc, char** arg
-glutInit(&argc,argv); 
-glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);      
-glutInitWindowSize(500,500);    
-glutInitWindowPosition(0,0); 
-glutCreateWindow("Koch Curves");     
-glutDisplayFunc(display);  
-	
-glutMainLoop();
+
+int main(int argc, char** argv)
+
+{
+
+    glutInit(&argc, argv);
+
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+
+    glutInitWindowSize(500, 500);
+
+    glutInitWindowPosition(0, 0);
+
+    glutCreateWindow("Koch Curves");
+
+    glutDisplayFunc(display);
+
+    glutMainLoop();
 }
