@@ -18,7 +18,6 @@ v) Kaleidoscope views generation (at least 3 colorful patterns)
 
 
 
-
 #include <iostream>
 #include <GL/glut.h>
 #include <math.h>
