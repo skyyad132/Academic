@@ -1,3 +1,24 @@
+/*
+" I understand how the engines work now. 
+  It came to me in a dream. 
+  The engines don't move the ship at all. 
+  The ship stays where it is and the engines move the universe around it."
+?Cubert Farnsworth, Futurama
+*/
+// I am learning from futurama. Woohoo!
+
+/*
+Animation : Implement any one of the following animation assignments,
+i) Clock with pendulum
+ii) National Flag hoisting
+iii) Vehicle/boat locomotion
+iv) Falling Water drop into the water and generated waves after impact
+v) Kaleidoscope views generation (at least 3 colorful patterns)
+*/
+
+
+
+
 #include <iostream>
 #include <GL/glut.h>
 #include <math.h>
@@ -35,17 +56,13 @@ void init()
 	glClearColor(0.6, 0.9, 1, 0);
 	glViewport(0, 0, 640, 480);
 	gluOrtho2D(0, 640, 0, 480);
-
-	// glMatrixMode(GL_PROJECTION);
-	// glLoadIdentity();
-	// glMatrixMode(GL_MODELVIEW);
 }
 
 
 
 void display()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	glColor3f(0, 0.75, 0); // mountains of green color
 	glBegin(GL_TRIANGLES);
@@ -99,7 +116,12 @@ void display()
 		glVertex2d(80, 160);
 	glEnd();
 
-	glPushMatrix(); // move car from left to right
+	// push the current matrix
+	// so as we translate the universe, current scheme won't
+	// car will be placed appropriately according to frame
+	// then after popping, background will be same as before, only car moved
+	glPushMatrix(); 
+
 	glTranslated((frame % 640) , 0, 0);
 
 	car();
