@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include <math.h>
 
-#define RADDEG 57.2957f
 void redraw();
 void drawBox();
 void triad();
