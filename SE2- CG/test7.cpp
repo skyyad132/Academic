@@ -1,3 +1,7 @@
+/*
+Implement translation, sheer, rotation and scaling transformations on equilateral triangle and rhombus.
+*/
+
 #include <iostream>
 #include <GL/glut.h>
 #include <math.h>
@@ -125,13 +129,16 @@ void askUser()
 				break;
 
 			case 6:
-				cout << "\n1.Against X axis\n2.Against Y axis\n3.Against origin\n4.Against X = Y\n";
+				cout << "\n1.Against X axis\n2.Against Y axis\n3.Against origin\n4.Against Y = X\n5.Against Y = -X";
 				cin >> z;
 
 				ref();
 				mul();
 				show();
 				break;
+
+			case 9:
+				exit(0);
 		}
 	}
 	while(choice != 9);
@@ -158,10 +165,10 @@ void accept()
 
 /*
 
-						1	0	0
-translation matrix = 	0	1	0
-						tx  ty  1
-
+					 | 1	0	0 |
+translation matrix = | 0	1	0 |
+				     |tx   ty   1 |
+ 
 */
 void trans() 
 {
@@ -284,9 +291,9 @@ void axis()
 
 
 /*
-				  sx    0     0
-scaling matrix =  0     sy    0
-				  0     0     1
+				  | sx    0     0 |
+scaling matrix =  | 0     sy    0 |
+				  | 0     0     1 |
 */
 
 void scal()
@@ -302,9 +309,9 @@ void scal()
 /*
 
 
-					 cosX   sinX    0
-rotation matrix Z = -sinX   cosX    0
-					 0       0      1
+					| cosX   sinX    0 |
+rotation matrix Z = |-sinX   cosX    0 |
+					| 0       0      1 |
 
  
 
@@ -320,9 +327,9 @@ void rot()
 	int i, j;
 	float rAngle;
 
-	if (z == 1) // clockwise. Angle same as before
+	if (z == 1) // anticlockwise. Angle same as before
 		angle = angle;
-	else // anticlockwise. Angle negated
+	else // clockwise. Angle negated
 		angle = angle * (-1);
 
 	// radian = (degree * pi) / 180;
@@ -374,8 +381,8 @@ void rotRef()
 /*
 Shearing in x by shx and y by shy
 
-						 |  0     shx    0 |
-transformation matrix =  | shy     1     0 |
+						 |  1     shy    0 |
+transformation matrix =  | shx     1     0 |
    						 |  0      0     1 |	
 
 */
@@ -394,8 +401,8 @@ void shear()
 		}
 	}
 
-	b[0][1] = shx;
-	b[1][0] = shy;
+	b[0][1] = shy;
+	b[1][0] = shx;
 }
 
 
@@ -457,7 +464,6 @@ void ref()
 			b[0][1] = 1;
 			b[1][0] = 1;
 			break;
-
 
 		case 5: // reflection about y = -x
 			b[0][1] = -1;

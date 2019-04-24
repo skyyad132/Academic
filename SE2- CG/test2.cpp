@@ -1,3 +1,8 @@
+/*
+Draw the polygons by using the mouse. Choose colors by clicking on the designed color pane. 
+Use window port to draw. (Use DDA algorithm for line drawing)
+*/
+
 #include <iostream>
 #include <math.h>
 #include <GL/glut.h>
