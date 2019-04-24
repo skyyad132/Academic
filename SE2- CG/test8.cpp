@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include <math.h>
 
-#define RADDEG 57.2957f
 void redraw();
 void drawBox();
 void triad();
@@ -59,17 +58,17 @@ void redraw()
 
     triad(); // drawing the axis
 
+    glPushMatrix();
     glTranslatef(translateIn_x_y_z[0], translateIn_x_y_z[1], translateIn_x_y_z[2]);
-
     //rotate abt x, y, z without rotating axis
-
+    
     glScalef(0.2, 0.2, 0.2);
     glRotatef(x_RotateAngle, 1, 0, 0);
     glRotatef(y_RotateAngle, 0, 1, 0);
     glRotatef(z_RotateAngle, 0, 0, 1);
 
     drawBox();
-    
+    glPopMatrix();
     glutSwapBuffers();
 }
 

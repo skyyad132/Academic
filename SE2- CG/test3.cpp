@@ -1,3 +1,8 @@
+/*
+Draw inscribed and Circumscribed circles in the triangle as shown as an example below.(Use
+any Circle drawing and Line drawing algorithms)
+*/
+
 #include <iostream>
 #include <math.h>
 #include <GL/glut.h>

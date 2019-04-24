@@ -1,3 +1,5 @@
+// Generate fractal patterns by using Koch curves
+
 #include <iostream>
 #include <math.h>
 #include <GL/glut.h>

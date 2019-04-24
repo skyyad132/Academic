@@ -94,7 +94,8 @@ void myDisplay()
 void drawPolygon()
 {
 	int i;
-    for (i = 0; i < n - 1; i++) {
+    for (i = 0; i < n - 1; i++) 
+    {
         glBegin(GL_LINES);
         glColor3f(0.0, 0.0, 1.0);
         glVertex2d(p[i].x, p[i].y);
@@ -102,9 +103,10 @@ void drawPolygon()
         glEnd();
     }
     glBegin(GL_LINES);
-    glVertex2d(p[i].x, p[i].y);
-    glVertex2d(p[0].x, p[0].y);
+        glVertex2d(p[i].x, p[i].y);
+        glVertex2d(p[0].x, p[0].y);
     glEnd();
+
     glFlush();
 }
 
@@ -116,6 +118,7 @@ void myMouse(int button, int state, int x, int y)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 
+        // draw clipping rectangle
         glBegin(GL_LINE_LOOP);
 	        glColor3f(0.0, 1.0, 0.0);
 	        glVertex2f(p1.x, p1.y);
@@ -124,10 +127,13 @@ void myMouse(int button, int state, int x, int y)
 	        glVertex2f(p1.x, p2.y);
         glEnd();
 
+        // clip the polygon
 		left();
 		right();
 		top();
 		bottom();
+
+        // draw the polygon after clipping
 		drawPolygon();
 	}
 	glFlush();
@@ -227,6 +233,61 @@ void right() //RIGHT BOUNDARY CLIPPING ALGO
 
 void bottom() //BOTTOM BOUNDARY CLIPPING ALGO
 {
+    i = 0; 
+    j = 0;
+
+    for (i = 0; i < n; i++)
+    {
+        if(p[i].y < p1.y && p[i+1].y >= p1.y)
+        {
+            if (p[i].x - p[i+1].x != 0)
+            {
+                pp[j].x = (p1.y - p[i].y) / ((p[i].y - p[i+1].y) / (p[i].x - p[i+1].x)) + p[i].x;
+            }
+            else
+            {
+                pp[j].x = p[i].x;
+            }
+            pp[j].y = p1.y;
+            j++;
+            pp[j].x = p[i+1].x;
+            pp[j].y = p[i+1].y;
+            j++;
+        }
+
+        if (p[i].y > p1.y && p[i+1].y >= p1.y)
+        {
+            pp[j].x = p[i+1].x;
+            pp[j].y = p[i+1].y;
+            j++;
+        }
+
+        if (p[i].y > p1.y && p[i+1].y <= p1.y)
+        {
+            if (p[i].x - p[i+1].x != 0)
+            {
+                pp[j].x = (p1.y - p[i].y) / ((p[i].y - p[i+1].y) / (p[i].x - p[i+1].x)) + p[i].x;
+            }
+            else
+            {
+                pp[j].x = p[i].x;
+            }  
+            pp[j].y = p1.y;
+            j++;          
+        }
+    }
+    for (i = 0; i < n; i++)
+    {
+        p[i].x = pp[i].x;
+        p[i].y = pp[i].y;
+    }
+    p[i].x = pp[0].x;
+    p[i].y = pp[0].y;
+    n = j;    
+}
+
+void top() //ABOVE BOUNDARY CLIPPING ALGO
+{
     i = 0;
     j = 0;
     for (i = 0; i < n; i++) {
@@ -256,50 +317,6 @@ void bottom() //BOTTOM BOUNDARY CLIPPING ALGO
                 pp[j].x = p[i].x;
             }
             pp[j].y = p2.y;
-            j++;
-        }
-    }
-
-    for (i = 0; i < j; i++) {
-        p[i].x = pp[i].x;
-        p[i].y = pp[i].y;
-    }
-    p[i].x = pp[0].x;
-    p[i].y = pp[0].y;
-    n = j;
-}
-
-void top() //ABOVE BOUNDARY CLIPPING ALGO
-{
-    i = 0;
-    j = 0;
-    for (i = 0; i < n; i++) {
-        if (p[i].y < p1.y && p[i + 1].y >= p1.y) {
-            if (p[i + 1].y - p[i].y != 0) {
-                pp[j].x = (p[i + 1].x - p[i].x) / (p[i + 1].y - p[i].y) * (p1.y - p[i].y) + p[i].x;
-            }
-            else {
-                pp[j].x = p[i].x;
-            }
-            pp[j].y = p1.y;
-            j++;
-            pp[j].x = p[i + 1].x;
-            pp[j].y = p[i + 1].y;
-            j++;
-        }
-        if (p[i].y > p1.y && p[i + 1].y >= p1.y) {
-            pp[j].y = p[i + 1].y;
-            pp[j].x = p[i + 1].x;
-            j++;
-        }
-        if (p[i].y > p1.y && p[i + 1].y <= p1.y) {
-            if (p[i + 1].y - p[i].y != 0) {
-                pp[j].x = (p[i + 1].x - p[i].x) / (p[i + 1].y - p[i].y) * (p1.y - p[i].y) + p[i].x;
-            }
-            else {
-                pp[j].x = p[i].x;
-            }
-            pp[j].y = p1.y;
             j++;
         }
     }

@@ -1,3 +1,8 @@
+/*
+Draw the following pattern using any Line drawing algorithms. 
+Using DDA here.
+*/
+
 #include <stdio.h>
 #include <iostream>
 #include <math.h>
@@ -74,7 +79,7 @@ void Init() {
 	glColor3f(0.0, 0.0, 0.0); //Vertex color. 3f : 3 for three parameters and f for floating point value of the parameter. . Here color of vertices will be black (0, 0, 0) unless new glColor3f() is used
 	glViewport(0, 0, 640, 480); //Set the viewport. parameters : (xOrigin, yOrigin, width, height)
 	glMatrixMode(GL_PROJECTION); //Specifies which matrix stack is the target for subsequent matrix operations. Three values are accepted: GL_MODELVIEW, GL_PROJECTION, and GL_TEXTURE. The initial value is GL_MODELVIEW
-	glLoadIdentity(); //glLoadIdentity — replace the current matrix with the identity matrix
+	glLoadIdentity(); //glLoadIdentity replace the current matrix with the identity matrix
 	gluOrtho2D(0, 640, 0, 480); //gluOrtho2D sets up a two-dimensional orthographic viewing region. Parameters are : (left, right, bottom, top)
 	// small 'd' for decimal and capital 'D' for dimension.
 }
@@ -109,7 +114,7 @@ int main(int argc, char **argv) {
  	Init();
 
  	glutDisplayFunc(display); //  glutDisplayFunc sets the display callback for the current window.
- 	glFlush(); //glFlush — force execution of GL commands in finite time
+ 	glFlush(); //glFlush force execution of GL commands in finite time
  	/*
 	Different GL implementations buffer commands in several different locations, including network buffers and the graphics accelerator itself. glFlush empties all of these buffers, causing all issued commands to be executed as quickly as they are accepted by the actual rendering engine. Though this execution may not be completed in any particular time period, it does complete in finite time.
 	

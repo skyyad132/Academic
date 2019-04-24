@@ -10,7 +10,7 @@ Use window port to draw. (Use DDA algorithm for line drawing)
 #define w 500
 #define h 500
 
-int k = 0;
+int k = 0; // for number of vertices of current polygon
 float a[30][2] = {0};
 
 
