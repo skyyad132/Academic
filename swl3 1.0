@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> SWL </title>
+	</head>
+
+	<body bgcolor = #E0E0E0>
+		<div style = "background-color: #E0E0E0;box-shadow: 0px 0px 8px 8px #888888; height:100px; width:1320px; padding:5px ; margin:8px;"  >
+			<img src = "la.png" height = 100/>
+			<img src = "la2.jpg" height = 100/>
+			<img src = "la3.jpg" height = 100/>
+			<img src = "la4.jpg" height = 100/>
+			<img src = "la5.jpg" height = 100 width = 195/>
+		</div>
+		
+	
+		<div style = 'font-family: "Arial"; float:left; background-color: #FFFFFF; text-align:left; box-shadow: 0px 0px 8px 8px #888888; margin:8px; margin-top:30px; width:1320px; padding:10px;'>
+			<h1> The City of Los Angeles </h1>
+			<br />
+			<div style = 'margin:8px; text-align:justify; width:825px'>
+				<span> Los Angeles (/lɔːs ˈændʒələs/ (About this soundlisten);[a] Spanish: Los Ángeles; Spanish for "The Angels"),[16] officially the City of Los Angeles and often known by its initials L.A., is the most populous city in California, the second most populous city in the United States, after New York City, and the third most populous city in North America. With an estimated population of nearly four million,[11] Los Angeles is the cultural, financial, and commercial center of Southern California. The city is known for its Mediterranean climate, ethnic diversity, Hollywood and the entertainment industry, and its sprawling metropolis. Los Angeles is the largest city on the West Coast of North America.
+Los Anmountains as high as 10,000 feet (3,000 m) on the other. The city proper, which covers about 469 square miles (1,210 km2),[17] is the seat of Los Angeles County, the most populated county in the country. Los Angeles is also the principal city of the Los Angeles metropolitan area, the second largest in the United States after that of New York City, with a population of 13.1 million.[18] It is part of the Los Angeles-Long Beach combined statistical area, also the nation's second most populous area with a 2015 estimated population of 18.7 million.[19]
+Los Angeles is one of the most substantial economic engines within the United States, with a diverse economy in a broad range of professional and cultural fields. Los Angeles is also famous as the home of Hollywood, a major center of the world entertainment industry. A global city, it has been ranked 6th in the Global Cities Index and 9th in the Global Economic Power Index. The Los Angeles metropolitan area also has a gross metropolitan product of $1.044 trillion[20] (as of 2017), making it the third-largest in the world, after the Tokyo and New York metropolitan areas. Los Angeles hosted the 1932 and 1984 Summer Olympics and will host the event for a third time in 2028. The city also hosted the Miss Universe pageant twice, in 1990 and 2006, and was one of 9 American cities to host the 1994 FIFA World Cup and one of 8 to host the 1999 FIFA Women's World Cup, hosting the final match for both tournaments.
+				
+				</span>
+			</div>
+			
+			</div>
+			
+	</body>
+</html>
